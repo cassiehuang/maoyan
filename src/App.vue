@@ -1,28 +1,48 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <mao-header v-if="isNormal"></mao-header>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import MaoHeader from './components/layout/header.vue'
+import { addResize } from '@/utils/Responsive.js'
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    MaoHeader
+  },
+  beforeMount() {
+    addResize(this.resizeChange);
+  },
+  methods: {
+    resizeChange(size) {
+      this.$store.commit('CHANGE_SCREEN', size);
+    }
+  },
+  computed: {
+    isNormal() {
+      return this.$route.path.indexOf('login') === -1;
+    }
   }
 }
 </script>
 
-<style>
+<style lang="less">
+@import '~@/less/reset.less';
+@import '~@/less/common.less';
+html,body {
+  height: 100%;
+}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+.stonefont {
+  font-family: stonefont;
 }
 </style>

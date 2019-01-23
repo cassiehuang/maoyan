@@ -145,7 +145,7 @@ export default {
     .prev-page, .next-page{
       width: 18px;
       height: 40px;
-      background: url('/img/arrow.png') no-repeat;
+      background: url('/public/img/arrow.png') no-repeat;
       display: inline-block;
       position: absolute;
       top: 180px;

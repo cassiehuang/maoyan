@@ -1,0 +1,14 @@
+{
+  "presets": [
+    [
+      "es2015",
+      "stage-0"
+    ]
+  ],
+  "plugins": [
+    "syntax-dynamic-import"
+  ]
+}
+// babel-polyfill支持新的全局变量，例如 Promise 、新的原生方法如 String.padStart (left-pad) 等
+// babel-preset-*系列打包了一组转码插件
+// babel-preset-es2015 打包es6特性 -stage-0 打包了strawman阶段的语法

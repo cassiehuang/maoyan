@@ -1,8 +1,8 @@
 <template>
   <div login>
     <div class="container">
-      <img class="logo" src="/img/logo.png" />
-      <img class="pic" src="/img/image1.png" />
+      <img class="logo" src="/public/img/logo.png" />
+      <img class="pic" src="/public/img/image1.png" />
       <div class="input-banner" :class="{error: errorHint}">
         <input type="text" v-model="username" placeholder="输入用户名" />
         <input type="password" v-model="password" placeholder="输入密码" />

@@ -3,7 +3,7 @@
     <sticky type="fixed">
       <top-nav>
         <router-link to="/" class="navbar-brand">
-          <img src="/img/logo.png" />
+          <img src="/public/img/logo.png" />
         </router-link>
         <select-bar type="city-select" class="hidden-md-down">
           <div class="select-label" slot="label">
@@ -37,7 +37,7 @@
         <div class="item-shrink-1"></div>
         <select-bar type="user-select" class="hidden-lg-down">
           <div class="select-label" slot="label">
-            <span class="user" :style="{'background-image': `url(${user.isLogin ? '/img/user-1.png' : '/img/user.png'})`}"></span>
+            <span class="user" :style="{'background-image': `url(${user.isLogin ? '/public/img/user-1.png' : '/public/img/user.png'})`}"></span>
             <span class="arrow"></span>
           </div>
           <div slot="list" class="select-list">
@@ -142,7 +142,7 @@ export default {
     border-radius: 50%;
     &::before {
       content: '';
-      background: url('/img/search.png');
+      background: url('/public/img/search.png');
       width: 40px;
       height: 40px;
       display: block;
@@ -224,7 +224,7 @@ nav {
         display: inline-block;
         width: 40px;
         height: 40px;
-        background: url('/img/user.png');
+        background: url('/public/img/user.png');
         background-size: 100% 100%;
         vertical-align: middle;
       }

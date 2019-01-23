@@ -208,7 +208,7 @@ export default {
         right: 8px;
         left: 8px;
         bottom: 45px;
-        background: url('/img/text-bg.png');
+        background: url('/public/img/text-bg.png');
         z-index: 100;
         height: 25px;
         padding-top: 55px;

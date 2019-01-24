@@ -1,11 +1,11 @@
-import Vue from 'vue'
-import App from './App.vue'
-import axios from 'axios'
-import 'babel-polyfill'
+import Vue from 'vue';
+import 'babel-polyfill';
+import App from './App.vue';
+import axios from 'axios';
 
-import router from './router/index.js'
-import store from './store/index.js'
-import { auth } from '@/utils/api_helper.js'
+import router from './router/index.js';
+import store from './store/index.js';
+import { auth } from '@/utils/api_helper.js';
 
 axios.defaults.baseURL = 'http://localhost:3333';
 Vue.config.productionTip = false;

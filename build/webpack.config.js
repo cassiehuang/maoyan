@@ -52,6 +52,13 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
+        // query: {
+        //   //babel-preset-es2015 打包es6特性 -stage-0 打包了strawman阶段的语法
+        //   presets: ['es2015', 'stage-0'], //babel-preset-*系列打包了一组转码插件
+
+        //   //babel-polyfill和transform-runtime实现浏览器对不支持api的兼容
+        //   plugins: ['transform-runtime']
+        // }
       },
       {
         //将文件转为base64 uri

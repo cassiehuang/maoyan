@@ -36,8 +36,8 @@
     "babel-core": "^6.24.1",
     "babel-eslint": "^10.0.1",
     "babel-loader": "7",
-    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.4.0",
     "compression": "^1.7.3",
     "copy-webpack-plugin": "^4.6.0",
@@ -45,7 +45,9 @@
     "file-loader": "^2.0.0",
     "html-webpack-plugin": "^3.2.0",
     "http-proxy-middleware": "^0.19.1",
+    "husky": "^1.3.1",
     "less-loader": "^4.1.0",
+    "lint-staged": "^8.1.5",
     "mini-css-extract-plugin": "^0.4.5",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "uglifyjs-webpack-plugin": "^2.1.1",
@@ -80,5 +82,18 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "liners": {
+      "src/**/*.js": [
+        "npm run lint",
+        "git add"
+      ]
+    }
+  }
 }

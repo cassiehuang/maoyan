@@ -75,7 +75,7 @@ module.exports = {
           {
             test: /App/,
             resourceQuery: /\?vue/,
-            use: [MiniCssExtractPlugin.loader, 'css-loader', 'less-loader'] //MiniCssExtractPlugin.loader提取css
+            use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'less-loader'] //MiniCssExtractPlugin.loader提取css
           },
           {
             use: ['vue-style-loader', 'css-loader', 'less-loader']

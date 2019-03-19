@@ -7,7 +7,8 @@
     "build": "yarn run clean && cross-env NODE_ENV=production webpack --config build/webpack.config.js",
     "clean": "rimraf dist",
     "lint": "eslint .",
-    "start": "cross-env NODE_ENV=production node server"
+    "start": "cross-env NODE_ENV=production node server",
+    "test": "yarn run lint"
   },
   "dependencies": {
     "async": "^2.6.1",

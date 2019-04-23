@@ -12,7 +12,7 @@ export default {
   data() {
     return {
       radioValue: this.value,
-    }
+    };
   },
   props: ['myRadioList', 'name', 'value'],
   components: {},
@@ -24,13 +24,13 @@ export default {
   methods: {},
   watch: {
     radioValue(newValue) {
-      this.$emit("radioType", newValue);
+      this.$emit('radioType', newValue);
     },
     value(newValue) {
       this.radioValue = newValue;
-    }
-  }
-}
+    },
+  },
+};
 
 </script>
 <style scoped lang="less">

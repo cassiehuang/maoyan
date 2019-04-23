@@ -18,18 +18,18 @@
 </style>
 <script>
 export default {
-  data () {
+  data() {
     return {
-    }
+    };
   },
-  props: [ 'type' ],
+  props: ['type'],
   components: {},
 
   computed: {},
 
   mounted() {},
 
-  methods: {}
-}
+  methods: {},
+};
 
 </script>

@@ -9,7 +9,7 @@
 export default {
   data() {
     return {
-    }
+    };
   },
   props: ['type'],
   components: {},
@@ -20,8 +20,8 @@ export default {
   },
 
   methods: {
-  }
-}
+  },
+};
 
 </script>
 <style lang="less">

@@ -1,7 +1,8 @@
 <template>
   <div v-if="recommandList.length > 0">
     <slider>
-      <li v-for="(item, idx) in recommandList" :key="idx">
+      <li v-for="(item, idx) in recommandList"
+          :key="idx">
         <router-link :to="`/article/${item.id}`">
           <img :src="item.recommand_img" />
         </router-link>
@@ -11,13 +12,18 @@
       <div class="left-section">
         <section class="online-films">
           <h3>正在热映（{{onlineFilmsLen}}）
-            <router-link class="more" to="/movie/1">全部 ></router-link>
+            <router-link class="more"
+                         to="/movie/1">全部 ></router-link>
           </h3>
           <div class="list">
-            <div class="item" v-for="(item, idx) in onlineFilms" :key="idx">
+            <div class="item"
+                 v-for="(item, idx) in onlineFilms"
+                 :key="idx">
               <img :src="item.img" />
               <p class="film-info">
-                <span class="grade" v-html="item.grade" v-if="item.grade!=='&#x6682;&#x65E0;&#x8BC4;&#x5206;'"></span>
+                <span class="grade"
+                      v-html="item.grade"
+                      v-if="item.grade!=='&#x6682;&#x65E0;&#x8BC4;&#x5206;'"></span>
                 <span class="film-title">{{ item.title }}</span>
               </p>
               <span class="buy">购票</span>
@@ -26,10 +32,13 @@
         </section>
         <section class="pre-films">
           <h3>即将上映（{{preFilmsLen}}）
-            <router-link class="more" to="/movie/2">全部 ></router-link>
+            <router-link class="more"
+                         to="/movie/2">全部 ></router-link>
           </h3>
           <div class="list">
-            <div class="item" v-for="(item, idx) in preFilms" :key="idx">
+            <div class="item"
+                 v-for="(item, idx) in preFilms"
+                 :key="idx">
               <img :src="item.img" />
               <p class="film-info">
                 <span class="film-title">{{ item.title }}</span>
@@ -48,8 +57,11 @@
         <aside class="aside-1 hidden-lg-down">
           <h3>今日票房</h3>
           <div class="list">
-            <div class="item" v-for="(item, idx) in goodFilms" :key="idx">
-              <div class="first" v-if="idx === 0">
+            <div class="item"
+                 v-for="(item, idx) in goodFilms"
+                 :key="idx">
+              <div class="first"
+                   v-if="idx === 0">
                 <img :src="item.img" />
                 <span>{{item.title}}</span><br>
                 <span>{{item.grade}}</span>
@@ -65,8 +77,11 @@
         <aside class="aside-2">
           <h3>最受期待</h3>
           <div class="list">
-            <div class="item" v-for="(item, idx) in hotFilms" :key="idx">
-              <div class="first" v-if="idx === 0">
+            <div class="item"
+                 v-for="(item, idx) in hotFilms"
+                 :key="idx">
+              <div class="first"
+                   v-if="idx === 0">
                 <img :src="item.img" />
                 <span>{{item.title}}</span>
                 <span>{{item.peopleNum}}人想看</span>
@@ -84,8 +99,11 @@
             <span>查看更多</span>
           </h3>
           <div class="list">
-            <div class="item" v-for="(item, idx) in goodFilms" :key="idx">
-              <div class="first" v-if="idx === 0">
+            <div class="item"
+                 v-for="(item, idx) in goodFilms"
+                 :key="idx">
+              <div class="first"
+                   v-if="idx === 0">
                 <img :src="item.img" />
                 <span>{{item.title}}</span>
                 <span>{{item.grade}}</span>
@@ -108,7 +126,8 @@ import Slider from '../components/slider.vue';
 // const opt = require('@/utils/api_helper.js');
 // const queryRecommand = opt.queryRecommand;
 // const queryFilms = opt.queryFilms;
-import {queryRecommand, queryFilms} from '@/utils/api_helper.js'
+import { queryRecommand, queryFilms } from '@/utils/api_helper';
+
 export default {
   data() {
     return {
@@ -119,7 +138,7 @@ export default {
       preFilmsLen: 0,
       goodFilms: [],
       hotFilms: [],
-    }
+    };
   },
 
   components: { Slider },
@@ -138,32 +157,32 @@ export default {
     getRecommand() {
       queryRecommand({ isShow: true }).then((data) => {
         this.recommandList = data.data;
-      })
+      });
     },
     getOnlineFilms() {
       queryFilms({ type: 1, limit: 12 }).then((data) => {
         this.onlineFilms = data.data;
         this.onlineFilmsLen = data.count;
-      })
+      });
     },
     getPreFilms() {
       queryFilms({ type: 2, limit: 12 }).then((data) => {
         this.preFilms = data.data;
         this.preFilmsLen = data.count;
-      })
+      });
     },
     getGoodFilms() {
       queryFilms({ type: 1, limit: 10, sort: { grade: -1 } }).then((data) => {
         this.goodFilms = data.data;
-      })
+      });
     },
     getHotFilms() {
       queryFilms({ type: 2, limit: 10, sort: { peopleNum: -1 } }).then((data) => {
         this.hotFilms = data.data;
-      })
-    }
-  }
-}
+      });
+    },
+  },
+};
 
 </script>
 <style scoped lang="less">

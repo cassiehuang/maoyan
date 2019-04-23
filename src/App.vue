@@ -6,12 +6,13 @@
 </template>
 
 <script>
-import MaoHeader from './components/layout/header.vue'
-import { addResize } from '@/utils/Responsive.js'
+import MaoHeader from './components/layout/header.vue';
+import { addResize } from '@/utils/Responsive';
+
 export default {
   name: 'app',
   components: {
-    MaoHeader
+    MaoHeader,
   },
   beforeMount() {
     addResize(this.resizeChange);
@@ -19,14 +20,14 @@ export default {
   methods: {
     resizeChange(size) {
       this.$store.commit('CHANGE_SCREEN', size);
-    }
+    },
   },
   computed: {
     isNormal() {
       return this.$route.path.indexOf('login') === -1;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="less">

@@ -4,12 +4,19 @@
       <ul class="slider-wrapper">
         <slot></slot>
       </ul>
-      <div class="navigation" @click="dotClick">
-        <span class="dot" v-for="(item, idx) in dotList" :key="idx" :class="{ on: curDot === idx}" :data-index="idx"></span>
+      <div class="navigation"
+           @click="dotClick">
+        <span class="dot"
+              v-for="(item, idx) in dotList"
+              :key="idx"
+              :class="{ on: curDot === idx}"
+              :data-index="idx"></span>
       </div>
       <div class="pagination">
-        <span class="prev-page" @click="prevSlide"></span>
-        <span class="next-page" @click="nextSlide"></span>
+        <span class="prev-page"
+              @click="prevSlide"></span>
+        <span class="next-page"
+              @click="nextSlide"></span>
       </div>
     </div>
   </div>
@@ -18,6 +25,7 @@
 <script>
 import $ from 'jquery';
 import _ from 'lodash';
+
 export default {
   data() {
     return {
@@ -26,7 +34,7 @@ export default {
       dotList: [],
       len: 0,
       obj: [],
-    }
+    };
   },
 
   components: {},
@@ -36,9 +44,9 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.init();
-      this.obj.eq(0).css({ 'opacity': 1 });
+      this.obj.eq(0).css({ opacity: 1 });
       this.slide();
-    })
+    });
   },
 
   methods: {
@@ -50,35 +58,35 @@ export default {
     dotClick(e) {
       if (e.target.className === 'dot') {
         this.stopSlide();
-        this.slideTo(this.curDot, parseInt($(e.target)[0].dataset.index), 10);
+        this.slideTo(this.curDot, parseInt($(e.target)[0].dataset.index, 10));
         this.slide();
       }
     },
     slide() {
-      this.myInterval = setInterval( () => {
+      this.myInterval = setInterval(() => {
         this.nextSlide();
       }, 3000);
     },
     slideTo(old, cur) {
       this.curDot = cur;
-      this.obj.eq(cur).css({ 'opacity': 1 });
-      this.obj.eq(old).css({ 'opacity': 0 });
+      this.obj.eq(cur).css({ opacity: 1 });
+      this.obj.eq(old).css({ opacity: 0 });
     },
     stopSlide() {
       clearInterval(this.myInterval);
     },
     prevSlide() {
       this.stopSlide();
-      this.slideTo(this.curDot, this.curDot <=0 ? (this.len - 1) : (this.curDot - 1));
+      this.slideTo(this.curDot, this.curDot <= 0 ? (this.len - 1) : (this.curDot - 1));
       this.slide();
     },
     nextSlide() {
       this.stopSlide();
       this.slideTo(this.curDot, this.curDot >= (this.len - 1) ? 0 : (this.curDot + 1));
       this.slide();
-    }
-  }
-}
+    },
+  },
+};
 
 </script>
 <style lang="less">

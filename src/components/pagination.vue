@@ -2,7 +2,9 @@
   <div>
     <ul @click="pageClick">
       <li v-if="curPage > 1">上一页</li>
-      <li v-for="(item, idx) in showPageList" :key="idx" :class="{on: curIndex === idx}">{{item}}</li>
+      <li v-for="(item, idx) in showPageList"
+          :key="idx"
+          :class="{on: curIndex === idx}">{{item}}</li>
       <li v-if="curPage < totalPage">下一页</li>
     </ul>
   </div>
@@ -14,7 +16,7 @@ export default {
     return {
       showPageList: [],
       curIndex: 0,
-    }
+    };
   },
   props: ['count', 'page'],
   components: {},
@@ -25,7 +27,7 @@ export default {
     },
     curPage() {
       return this.showPageList[this.curIndex];
-    }
+    },
   },
 
   mounted() {
@@ -39,7 +41,7 @@ export default {
         return;
       }
       if (this.totalPage <= 7) {
-        for (let i = 1; i <= this.totalPage; i++) {
+        for (let i = 1; i <= this.totalPage; i += 1) {
           this.showPageList.push(i);
         }
         return;
@@ -47,35 +49,31 @@ export default {
       this.showPageList = [1, 2, 3, 4, 5, '...', this.totalPage];
     },
     changePage(page) {
-      this.$emit('page',page);
+      this.$emit('page', page);
       if (this.totalPage <= 7) {
         this.curIndex = page - 1;
+      } else if (page <= 3) {
+        this.showPageList = [1, 2, 3, 4, 5, '...', this.totalPage];
+        this.curIndex = page - 1;
+      } else if (page >= this.totalPage - 1) {
+        this.showPageList = ['...', this.totalPage - 5, this.totalPage - 4, this.totalPage - 3, this.totalPage - 2, this.totalPage - 1, this.totalPage];
+        this.curIndex = page + 6 - this.totalPage;
       } else {
-        if (page <= 3) {
-          this.showPageList = [1, 2, 3, 4, 5, '...', this.totalPage];
-          this.curIndex = page - 1;
-        } else if (page >= this.totalPage - 1) {
-          this.showPageList = ['...', this.totalPage - 5, this.totalPage - 4, this.totalPage - 3, this.totalPage - 2, this.totalPage - 1, this.totalPage];
-          this.curIndex = page + 6 - this.totalPage;
-        } else {
-          this.showPageList = ['...', page -2, page - 1, page, page + 1, page + 2, '...'];
-          this.curIndex = 3;
-        }
+        this.showPageList = ['...', page - 2, page - 1, page, page + 1, page + 2, '...'];
+        this.curIndex = 3;
       }
     },
     pageClick(e) {
       if (e.target.innerHTML === '上一页') {
         this.changePage(this.curPage - 1);
-      }
-      else if (e.target.innerHTML === '下一页') {
+      } else if (e.target.innerHTML === '下一页') {
         this.changePage(this.curPage + 1);
-      }
-      else if (parseInt(e.target.innerHTML, 10) > 0) {
+      } else if (parseInt(e.target.innerHTML, 10) > 0) {
         this.changePage(parseInt(e.target.innerHTML, 10));
       }
-    }
-  }
-}
+    },
+  },
+};
 
 </script>
 <style scoped lang="less">

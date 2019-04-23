@@ -1,48 +1,70 @@
 <template>
   <div cinemas>
-    <div class="category" @click="categoryClick">
+    <div class="category"
+         @click="categoryClick">
       <div class="list">
         <span class="name">品牌:</span>
         <ul>
-          <li v-for="(item, idx) in brandList" :key="idx" :class="{on: idx === dataParams.brandIndex}" data-parent="1" :data-child="idx" v-html="item.text"></li>
+          <li v-for="(item, idx) in brandList"
+              :key="idx"
+              :class="{on: idx === dataParams.brandIndex}"
+              data-parent="1"
+              :data-child="idx"
+              v-html="item.text"></li>
         </ul>
       </div>
       <hr>
       <div class="list">
         <span class="name">行政区:</span>
         <ul>
-          <li v-for="(item, idx) in areaList" :key="idx" :class="{on: idx === dataParams.areaIndex}" data-parent="2" :data-child="idx">{{ item.text }}</li>
+          <li v-for="(item, idx) in areaList"
+              :key="idx"
+              :class="{on: idx === dataParams.areaIndex}"
+              data-parent="2"
+              :data-child="idx">{{ item.text }}</li>
         </ul>
       </div>
       <hr>
       <div class="list">
         <span class="name">特殊厅:</span>
         <ul>
-          <li v-for="(item, idx) in hallList" :key="idx" :class="{on: idx === dataParams.hallIndex}" data-parent="3" :data-child="idx">{{ item.text }}</li>
+          <li v-for="(item, idx) in hallList"
+              :key="idx"
+              :class="{on: idx === dataParams.hallIndex}"
+              data-parent="3"
+              :data-child="idx">{{ item.text }}</li>
         </ul>
       </div>
     </div>
     <h2>影院列表</h2>
-    <div class="cinema_list" v-show="!isLoading">
-      <div class="item" v-for="(item, idx) in cinemasList" :key="idx">
+    <div class="cinema_list"
+         v-show="!isLoading">
+      <div class="item"
+           v-for="(item, idx) in cinemasList"
+           :key="idx">
         <h4>{{item.name}}</h4>
         <p>{{item.address}}</p>
         <div class="buy">
-          <input type="button" value="选座购票"/>
+          <input type="button"
+                 value="选座购票" />
         </div>
       </div>
     </div>
-    <pagination :count="count" :page="dataParams.curPage" @page="getPage" v-if="count > 0"></pagination>
+    <pagination :count="count"
+                :page="dataParams.curPage"
+                @page="getPage"
+                v-if="count > 0"></pagination>
   </div>
 </template>
 
 <script>
 import pagination from '@/components/pagination.vue';
+
 const cinemas = require('@/data/cinemas.json');
-const queryCinemas = require('@/utils/api_helper.js').queryCinemas;
+const { queryCinemas } = require('@/utils/api_helper.js');
 
 export default {
-  data () {
+  data() {
     return {
       dataParams: {
         curPage: 1,
@@ -54,7 +76,7 @@ export default {
       count: 0,
       listeners: [],
       isLoading: false,
-    }
+    };
   },
 
   components: { pagination },
@@ -68,10 +90,10 @@ export default {
     },
     hallList() {
       return cinemas.hall;
-    }
+    },
   },
 
-  mounted() {},
+  mounted() { },
 
   methods: {
     getData(params) {
@@ -86,16 +108,22 @@ export default {
       }).catch(() => {
         this.isLoading = false;
         this.emitListener();
-      })
+      });
     },
     addListener() {
-      let params = {
+      const params = {
         skip: (this.dataParams.curPage - 1) * 12,
         limit: 12,
+      };
+      if (this.dataParams.brandIndex !== 0) {
+        params.brandId = cinemas.brand[this.dataParams.brandIndex].id;
       }
-      if ( this.dataParams.brandIndex != 0) params.brandId = cinemas.brand[this.dataParams.brandIndex].id;
-      if ( this.dataParams.areaIndex != 0) params.areaId = cinemas.area[this.dataParams.areaIndex].id;
-      if ( this.dataParams.hallIndex != 0) params.hallId = cinemas.hall[this.dataParams.hallIndex].id;
+      if (this.dataParams.areaIndex !== 0) {
+        params.areaId = cinemas.area[this.dataParams.areaIndex].id;
+      }
+      if (this.dataParams.hallIndex !== 0) {
+        params.hallId = cinemas.hall[this.dataParams.hallIndex].id;
+      }
       this.listeners.push(params);
     },
     emitListener() {
@@ -120,19 +148,19 @@ export default {
     },
     getPage(value) {
       this.$set(this.dataParams, 'curPage', value);
-    }
+    },
   },
   watch: {
     dataParams: {
       deep: true,
       immediate: true,
-      handler: function () {
+      handler() {
         this.addListener();
         this.emitListener();
-      }
-    }
-  }
-}
+      },
+    },
+  },
+};
 
 </script>
 <style scoped lang="less">

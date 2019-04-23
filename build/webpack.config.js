@@ -39,6 +39,12 @@ module.exports = {
     noParse: /es6-promise\.js$/,  //防止webpack解析
     rules: [
       {
+        test: /\.(vue|js)$/,
+        loader: 'eslint-loader',
+        exclude: /node_modules/,
+        enforce: 'pre',
+      },
+      {
         test: /\.vue$/,
         loader: 'vue-loader',
         exclude: /node_modules/,

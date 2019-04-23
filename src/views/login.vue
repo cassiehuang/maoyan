@@ -13,14 +13,15 @@
 </template>
 
 <script>
-import { login } from '@/utils/api_helper.js'
+import { login } from '@/utils/api_helper';
+
 export default {
   data() {
     return {
       username: '',
       password: '',
       errorHint: false,
-    }
+    };
   },
 
   components: {},
@@ -31,17 +32,23 @@ export default {
 
   methods: {
     submit() {
-      if (this.username === '') return this.errorHint = true;
-      if (this.password === '') return this.errorHint = true;
-      login({username: this.username, password: this.password}).then((data) => {
-        if(!data.username) {
+      if (this.username === '') {
+        this.errorHint = true;
+        return;
+      }
+      if (this.password === '') {
+        this.errorHint = true;
+        return;
+      }
+      login({ username: this.username, password: this.password }).then((data) => {
+        if (!data.username) {
           this.errorHint = true;
         } else {
           this.$store.commit('CHANGE_LOADING', data);
           this.$router.push('/home');
         }
-      })
-    }
+      });
+    },
   },
   watch: {
     username() {
@@ -49,9 +56,9 @@ export default {
     },
     password() {
       this.errorHint = false;
-    }
-  }
-}
+    },
+  },
+};
 
 </script>
 <style scoped lang="less">

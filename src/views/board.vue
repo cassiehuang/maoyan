@@ -3,43 +3,54 @@
     <nav>
       <ul>
         <li>
-          <router-link to="/board/1" :class="{on: this.curType === 1}">热映口碑榜</router-link>
+          <router-link to="/board/1"
+                       :class="{on: this.curType === 1}">热映口碑榜</router-link>
         </li>
         <li>
-          <router-link to="/board/2" :class="{on: this.curType === 2}">最受期待榜</router-link>
+          <router-link to="/board/2"
+                       :class="{on: this.curType === 2}">最受期待榜</router-link>
         </li>
         <li>
-          <router-link to="/board/3" :class="{on: this.curType === 3}">TOP100榜</router-link>
+          <router-link to="/board/3"
+                       :class="{on: this.curType === 3}">TOP100榜</router-link>
         </li>
       </ul>
     </nav>
     <p class="hint">
       {{text}}
     </p>
-    <div class="list" v-show="!isLoading">
-      <div class="item" v-for="(item, idx) in list" :key="idx">
+    <div class="list"
+         v-show="!isLoading">
+      <div class="item"
+           v-for="(item, idx) in list"
+           :key="idx">
         <div class="seq">{{idx + 1}}</div>
-        <img :src="item.img" :alt="item.title" />
+        <img :src="item.img"
+             :alt="item.title" />
         <div class="detail">
           <h3>{{item.title}}</h3>
           <p>{{item.title}}</p>
-          <div v-if="curSize === 'sm'">{{ curType === 2 ? '想看人数'+item.peopleNum : item.grade }}</div>
+          <div v-if="curSize === 'sm'">{{ curType === 2 ? '想看人数'+item.peopleNum
+            : item.grade }}</div>
         </div>
-        <div class="grade" v-if="curType !== 2 && curSize !=='sm'">{{ item.grade }}</div>
-        <div class="peopleNum" v-if="curType === 2 && curSize !=='sm'">{{'想看人数'+item.peopleNum}}</div>
+        <div class="grade"
+             v-if="curType !== 2 && curSize !=='sm'">{{ item.grade }}</div>
+        <div class="peopleNum"
+             v-if="curType === 2 && curSize !=='sm'">{{'想看人数'+item.peopleNum}}</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { queryFilms } from '@/utils/api_helper.js'
+import { queryFilms } from '@/utils/api_helper';
+
 export default {
   data() {
     return {
       list: [],
       isLoading: false,
-    }
+    };
   },
 
   components: {},
@@ -62,7 +73,7 @@ export default {
     },
     curSize() {
       return this.$store.state.screen.size;
-    }
+    },
   },
 
   mounted() {
@@ -76,20 +87,20 @@ export default {
         case 1:
           params = {
             type: 1,
-            sort: { grade: -1 }
-          }
+            sort: { grade: -1 },
+          };
           break;
         case 2:
           params = {
             type: 2,
-            sort: { peopleNum: -1 }
-          }
+            sort: { peopleNum: -1 },
+          };
           break;
 
         default:
           params = {
-            sort: { grade: -1 }
-          }
+            sort: { grade: -1 },
+          };
           break;
       }
       params.limit = 10;
@@ -98,18 +109,18 @@ export default {
         this.isLoading = false;
       }).catch(() => {
         this.isLoading = false;
-      })
-    }
+      });
+    },
   },
   watch: {
     $route: {
       immediate: true,
-      handler: function () {
+      handler() {
         this.getData();
-      }
-    }
-  }
-}
+      },
+    },
+  },
+};
 
 </script>
 <style scoped lang="less">

@@ -4,7 +4,7 @@ import Vue from 'vue';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state:{
+  state: {
     user: {
       isLogin: false,
       username: null,
@@ -12,24 +12,31 @@ export default new Vuex.Store({
     },
     city: '成都',
     screen: {
-      size: 'xl'
+      size: 'xl',
     },
   },
-  actions:{},
-  mutations:{
+  actions: {},
+  mutations: {
     CHANGE_SCREEN(state, size) {
-      state.screen.size = size;
+      state.screen = {
+        size,
+      };
     },
-    CHANGE_LOADING(state, user) {
-      state.user.isLogin = true;
-      state.user.username = user.username;
+    CHANGE_LOADING(state, { username }) {
+      state.user = {
+        isLogin: true,
+        username,
+      };
     },
     CHANGE_ENTER(state) {
-      state.user.firstEnter = false;
+      state.user = {
+        firstEnter: false,
+        isLogin: true,
+      };
     },
     CHANGE_CITY(state, city) {
       state.city = city;
-    }
+    },
   },
-  getters:{}
+  getters: {},
 });

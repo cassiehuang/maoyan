@@ -4,9 +4,9 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
-    }
+    };
   },
 
   components: {},
@@ -15,8 +15,8 @@ export default {
 
   mounted() {},
 
-  methods: {}
-}
+  methods: {},
+};
 
 </script>
 <style scoped>

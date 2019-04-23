@@ -10,7 +10,7 @@ export default {
   data() {
     return {
       isOpen: false,
-    }
+    };
   },
 
   components: {},
@@ -22,9 +22,9 @@ export default {
   methods: {
     toggleBanner() {
       this.isOpen = !this.isOpen;
-    }
-  }
-}
+    },
+  },
+};
 
 </script>
 <style lang="less">

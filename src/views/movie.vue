@@ -3,59 +3,85 @@
     <nav>
       <ul>
         <li>
-          <router-link to="/movie/1" :class="{on: this.curType === 1}">正在热映</router-link>
+          <router-link to="/movie/1"
+                       :class="{on: this.curType === 1}">正在热映</router-link>
         </li>
         <li>
-          <router-link to="/movie/2" :class="{on: this.curType === 2}">即将上映</router-link>
+          <router-link to="/movie/2"
+                       :class="{on: this.curType === 2}">即将上映</router-link>
         </li>
         <li>
-          <router-link to="/movie/3" :class="{on: this.curType === 3}">经典影片</router-link>
+          <router-link to="/movie/3"
+                       :class="{on: this.curType === 3}">经典影片</router-link>
         </li>
       </ul>
     </nav>
-    <div class="category" @click="categoryClick">
+    <div class="category"
+         @click="categoryClick">
       <div class="list">
         <span class="name">类型:</span>
         <ul>
-          <li v-for="(item, idx) in catList" :key="idx" :class="{on: idx === dataParams.catIndex}" data-parent="1" :data-child="idx">{{ item.text }}</li>
+          <li v-for="(item, idx) in catList"
+              :key="idx"
+              :class="{on: idx === dataParams.catIndex}"
+              data-parent="1"
+              :data-child="idx">{{ item.text }}</li>
         </ul>
       </div>
       <hr>
       <div class="list">
         <span class="name">区域:</span>
         <ul>
-          <li v-for="(item, idx) in sourceList" :key="idx" :class="{on: idx === dataParams.sourceIndex}" data-parent="2" :data-child="idx">{{ item.text }}</li>
+          <li v-for="(item, idx) in sourceList"
+              :key="idx"
+              :class="{on: idx === dataParams.sourceIndex}"
+              data-parent="2"
+              :data-child="idx">{{ item.text }}</li>
         </ul>
       </div>
       <hr>
       <div class="list">
         <span class="name">年代:</span>
         <ul>
-          <li v-for="(item, idx) in sourceList" :key="idx" :class="{on: idx === dataParams.timeIndex}" data-parent="3" :data-child="idx">{{ item.text }}</li>
+          <li v-for="(item, idx) in sourceList"
+              :key="idx"
+              :class="{on: idx === dataParams.timeIndex}"
+              data-parent="3"
+              :data-child="idx">{{ item.text }}</li>
         </ul>
       </div>
     </div>
     <div class="movieList">
       <div class="sortList">
-        <my-radio :myRadioList="myRadioList" name="type" @radioType="radioType" :value="dataParams.radioValue"></my-radio>
+        <my-radio :myRadioList="myRadioList"
+                  name="type"
+                  @radioType="radioType"
+                  :value="dataParams.radioValue"></my-radio>
       </div>
-      <div class="filmList" v-if="!isLoading">
-        <div class="item" v-for="(film, idx) in filmsList" :key="idx">
+      <div class="filmList"
+           v-if="!isLoading">
+        <div class="item"
+             v-for="(film, idx) in filmsList"
+             :key="idx">
           <img :src="film.img" />
           <p>{{film.title}}</p>
           <div v-html="film.grade ? film.grade : 暂无评分"></div>
         </div>
       </div>
     </div>
-    <pagination :count="count" v-if="count > 0" @page="getPage" :page="dataParams.curPage"></pagination>
+    <pagination :count="count"
+                v-if="count > 0"
+                @page="getPage"
+                :page="dataParams.curPage"></pagination>
   </div>
 </template>
 
 <script>
 import myRadio from '@/components/myRadio.vue';
 import pagination from '@/components/pagination.vue';
+
 const category = require('@/data/category.json');
-const queryFilms = require('@/utils/api_helper.js').queryFilms;
+const { queryFilms } = require('@/utils/api_helper');
 
 export default {
   data() {
@@ -75,7 +101,7 @@ export default {
           value: 3,
           label: '按评价排序',
           isChecked: false,
-        }
+        },
       ],
       filmsList: [],
       count: 0,
@@ -88,7 +114,7 @@ export default {
         curPage: 1,
       },
       isLoading: false,
-    }
+    };
   },
 
   components: { myRadio, pagination },
@@ -105,11 +131,11 @@ export default {
     },
     curType() {
       return parseInt(this.$route.params.type, 10);
-    }
+    },
   },
 
   mounted() {
-    
+
   },
 
   methods: {
@@ -140,17 +166,27 @@ export default {
       }).catch(() => {
         this.isLoading = false;
         this.emitDataListener();
-      })
+      });
     },
     addDataListener() {
-      let params = {
+      const params = {
         type: this.curType,
+      };
+      if (this.dataParams.catIndex !== 0) {
+        params.catId = this.catList[this.dataParams.catIndex].catId;
       }
-      if (this.dataParams.catIndex !== 0) params.catId = this.catList[this.dataParams.catIndex].catId;
-      if (this.dataParams.sourceIndex !== 0) params.sourceId = this.sourceList[this.dataParams.sourceIndex].sourceId;
-      if (this.dataParams.timeIndex !== 0) params.timeId = this.timeList[this.dataParams.timeIndex].timeId;
-      if (this.dataParams.radioValue === 2) params.sort = { "time": -1 };
-      if (this.dataParams.radioValue === 3) params.sort = { "grade": -1 };
+      if (this.dataParams.sourceIndex !== 0) {
+        params.sourceId = this.sourceList[this.dataParams.sourceIndex].sourceId;
+      }
+      if (this.dataParams.timeIndex !== 0) {
+        params.timeId = this.timeList[this.dataParams.timeIndex].timeId;
+      }
+      if (this.dataParams.radioValue === 2) {
+        params.sort = { time: -1 };
+      }
+      if (this.dataParams.radioValue === 3) {
+        params.sort = { grade: -1 };
+      }
       params.limit = 30;
       params.skip = (this.dataParams.curPage - 1) * 30;
       this.dataListener.push(params);
@@ -168,16 +204,16 @@ export default {
     },
     getPage(value) {
       this.$set(this.dataParams, 'curPage', value);
-    }
+    },
   },
   watch: {
     dataParams: {
       deep: true,
       immediate: true,
-      handler: function () {
+      handler() {
         this.addDataListener();
         this.emitDataListener();
-      }
+      },
     },
     $route() {
       this.count = 0;
@@ -187,11 +223,11 @@ export default {
         timeIndex: 0,
         radioValue: 1,
         curPage: 1,
-      }
+      };
       this.emitDataListener();
-    }
-  }
-}
+    },
+  },
+};
 
 </script>
 <style scoped lang="less">

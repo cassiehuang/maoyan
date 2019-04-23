@@ -3,9 +3,9 @@ import 'babel-polyfill';
 import App from './App.vue';
 import axios from 'axios';
 
-import router from './router/index.js';
-import store from './store/index.js';
-import { auth } from '@/utils/api_helper.js';
+import router from './router/index';
+import store from './store/index';
+import { auth } from '@/utils/api_helper';
 
 axios.defaults.baseURL = 'http://localhost:3333';
 Vue.config.productionTip = false;
@@ -15,17 +15,16 @@ router.beforeEach((from, to, next) => {
     auth().then((data) => {
       if (data.username) {
         store.commit('CHANGE_LOADING', data);
-      }
-      else {
+      } else {
         store.commit('CHANGE_ENTER');
       }
-    })
+    });
   }
   next();
-})
+});
 
 new Vue({
   router,
   store,
-  render: h => h(App)
-}).$mount('#app')
+  render: h => h(App),
+}).$mount('#app');

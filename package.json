@@ -23,7 +23,7 @@
     "http-proxy-middleware": "^0.19.1",
     "jquery": "^3.3.1",
     "less": "^3.8.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
     "morgan": "^1.9.1",
     "popper.js": "^1.14.4",
     "serve-favicon": "^2.5.0",

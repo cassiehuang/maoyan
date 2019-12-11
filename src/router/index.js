@@ -7,14 +7,14 @@ const router = new VueRouter({
   mode: 'history',
   scrollBehavior(to, from, savedPosition) {
     if (to.hash) {
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         setTimeout(() => {
           resolve({ selector: to.hash, offset: { y: 50 } });
         }, 300);
       });
     }
     if (savedPosition) {
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         setTimeout(() => {
           resolve(savedPosition);
         }, 100);
@@ -37,10 +37,6 @@ const router = new VueRouter({
     },
     {
       path: '/movie',
-      redirect: '/movie/1',
-    },
-    {
-      path: '/movie/:type',
       component: () => import(/* webpackChunkName: "movie", webpackPrefetch: true */ '@/views/movie.vue'),
     },
     {
@@ -54,6 +50,10 @@ const router = new VueRouter({
     {
       path: '/board/:type',
       component: () => import(/* webpackChunkName: "board", webpackPrefetch: true */ '@/views/board.vue'),
+    },
+    {
+      path: '/search',
+      component: () => import(/* webpackChunkName: "board", webpackPrefetch: true */ '@/views/search.vue'),
     },
   ],
 });

@@ -9,18 +9,18 @@
 [sticky] {
   position: relative;
 }
-.fixed .holder{
+.fixed .holder {
   position: fixed;
-  top:0;
+  top: 0;
   width: 100%;
   z-index: 1000;
+  border-bottom: 1px solid #d8d8d8;
 }
 </style>
 <script>
 export default {
   data() {
-    return {
-    };
+    return {};
   },
   props: ['type'],
   components: {},
@@ -31,5 +31,4 @@ export default {
 
   methods: {},
 };
-
 </script>

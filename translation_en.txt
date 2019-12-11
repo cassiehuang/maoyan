@@ -1,0 +1,12 @@
+translate.board.undefined
+translate.calc.cdnUsageData
+translate.calc.cdnUsageCount
+translate.calc.redisShardMsg
+translate.calc.redisReplicaMsg
+translate.calc.searchContainerCountError
+translate.calc.loadBalancerRule
+translate.usageConfirm
+translate.gnb.addService
+translate.unit.suffixKrw
+translate.usage.productVMCount
+translate.usage.productMbps

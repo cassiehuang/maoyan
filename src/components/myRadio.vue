@@ -1,8 +1,8 @@
 <template>
   <div radio-group>
     <div class="input-wrap" v-for="item in myRadioList" :key="item.value">
-      <input type="radio" :value="item.value" :name="name" v-model="radioValue"/>
-      <label>{{item.label}}</label>
+      <input type="radio" :value="item.value" :name="name" v-model="radioValue" />
+      <label>{{ item.label }}</label>
     </div>
   </div>
 </template>
@@ -19,19 +19,18 @@ export default {
 
   computed: {},
 
-  mounted() { },
+  mounted() {},
 
   methods: {},
   watch: {
     radioValue(newValue) {
-      this.$emit('radioType', newValue);
+      this.$emit('radioChange', newValue);
     },
     value(newValue) {
       this.radioValue = newValue;
     },
   },
 };
-
 </script>
 <style scoped lang="less">
 @import '~@/less/common.less';
@@ -47,9 +46,9 @@ export default {
       position: relative;
       padding: 0 7px;
       &::before {
-        content:'';
+        content: '';
         position: absolute;
-        top:0;
+        top: 0;
         left: 0;
         width: 16px;
         height: 16px;

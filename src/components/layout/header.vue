@@ -2,29 +2,25 @@
   <div header>
     <sticky type="fixed">
       <top-nav>
-        <router-link to="/"
-                     class="navbar-brand">
-          <img src="/public/img/logo.png" />
+        <router-link to="/" class="navbar-brand">
+          <img src="/public/img/logo.png">
         </router-link>
-        <select-bar type="city-select"
-                    class="hidden-md-down">
-          <div class="select-label"
-               slot="label">
+        <select-bar type="city-select" class="hidden-md-down">
+          <div class="select-label" slot="label">
             <span>{{ currentCity }}</span>
             <span class="arrow"></span>
           </div>
-          <div slot="list"
-               class="select-list">
+          <div slot="list" class="select-list">
             <div class="city-div">定位城市：{{ currentCity }}</div>
-            <ul class="city-ul"
-                @click="cityClick">
-              <li v-for="(item, idx) in cityList"
-                  :key="idx">
+            <ul class="city-ul" @click="cityClick">
+              <li v-for="(item, idx) in cityList" :key="idx">
                 <div>{{ item.title }}</div>
                 <span>
-                  <a v-for="(city, index) in item.lists"
-                     :key="`${idx}-${index}`"
-                     :data-city="city">{{ city }}</a>
+                  <a
+                    v-for="(city, index) in item.lists"
+                    :key="`${idx}-${index}`"
+                    :data-city="city"
+                  >{{ city }}</a>
                 </span>
               </li>
             </ul>
@@ -32,36 +28,31 @@
         </select-bar>
         <div class="navbar-collapse">
           <ul class="navbar-nav">
-            <li v-for="(nav, idx) in navList"
-                :key="idx">
+            <li v-for="(nav, idx) in navList" :key="idx">
               <router-link :to="nav.path">{{ nav.name }}</router-link>
             </li>
           </ul>
         </div>
         <div class="item-shrink"></div>
         <div class="input-group search hidden-md-down">
-          <input type="search"
-                 maxlength="32"
-                 placeholder="找影视剧、影人、影院" />
-          <span></span>
+          <input type="search" maxlength="32" placeholder="找影视剧、影人、影院" @keydown.enter="search" v-model="keyword">
+          <span @click="search"></span>
         </div>
         <div class="item-shrink-1"></div>
-        <select-bar type="user-select"
-                    class="hidden-lg-down">
-          <div class="select-label"
-               slot="label">
-            <span class="user"
-                  :style="{'background-image': `url(${user.isLogin ?
-                  '/public/img/user-1.png' : '/public/img/user.png'})`}"></span>
+        <select-bar type="user-select" class="hidden-lg-down">
+          <div class="select-label" slot="label">
+            <span
+              class="user"
+              :style="{'background-image': `url(${user.isLogin ? '/public/img/user-1.png' : '/public/img/user.png'})`}"
+            ></span>
             <span class="arrow"></span>
           </div>
-          <div slot="list"
-               class="select-list">
+          <div slot="list" class="select-list">
             <div v-if="!user.isLogin">
               <router-link to="/login">登录</router-link>
             </div>
             <div v-if="user.isLogin">
-              <router-link to="/">{{user.username}}</router-link>
+              <router-link to="/">{{ user.username }}</router-link>
             </div>
           </div>
         </select-bar>
@@ -98,6 +89,7 @@ export default {
           name: '榜单',
         },
       ],
+      keyword: '',
     };
   },
 
@@ -115,17 +107,17 @@ export default {
     },
   },
 
-  mounted() { },
-
   methods: {
     cityClick(e) {
       if (e.target.dataset.city) {
         this.$store.commit('CHANGE_CITY', e.target.dataset.city);
       }
     },
+    search() {
+      this.$router.push(`/search?keyword=${this.keyword}`);
+    },
   },
 };
-
 </script>
 <style lang="less" scoped>
 @import '~@/less/common.less';
@@ -171,17 +163,17 @@ export default {
   }
 }
 nav {
-    .navbar-nav {
-      background: #f5f5f5;
-      box-shadow: 2px 2px 5px  #ccc;
-      .border(bottom);
-      a {
-        &.router-link-active {
-          color: @red-color !important;
-        }
+  .navbar-nav {
+    background: #f5f5f5;
+    box-shadow: 2px 2px 5px #ccc;
+    .border(bottom);
+    a {
+      &.router-link-active {
+        color: @red-color !important;
       }
     }
   }
+}
 @media (min-width: @lg-min) {
   nav {
     padding: 0 20px;
@@ -234,7 +226,7 @@ nav {
       padding: 5px 8px;
       &:hover {
         background: @red-color;
-          color: #ffffff;
+        color: #ffffff;
       }
     }
   }

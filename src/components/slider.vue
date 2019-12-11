@@ -4,19 +4,18 @@
       <ul class="slider-wrapper">
         <slot></slot>
       </ul>
-      <div class="navigation"
-           @click="dotClick">
-        <span class="dot"
-              v-for="(item, idx) in dotList"
-              :key="idx"
-              :class="{ on: curDot === idx}"
-              :data-index="idx"></span>
+      <div class="navigation" @click="dotClick">
+        <span
+          class="dot"
+          v-for="(item, idx) in dotList"
+          :key="idx"
+          :class="{ on: curDot === idx}"
+          :data-index="idx"
+        ></span>
       </div>
       <div class="pagination">
-        <span class="prev-page"
-              @click="prevSlide"></span>
-        <span class="next-page"
-              @click="nextSlide"></span>
+        <span class="prev-page" @click="prevSlide"></span>
+        <span class="next-page" @click="nextSlide"></span>
       </div>
     </div>
   </div>
@@ -77,17 +76,16 @@ export default {
     },
     prevSlide() {
       this.stopSlide();
-      this.slideTo(this.curDot, this.curDot <= 0 ? (this.len - 1) : (this.curDot - 1));
+      this.slideTo(this.curDot, this.curDot <= 0 ? this.len - 1 : this.curDot - 1);
       this.slide();
     },
     nextSlide() {
       this.stopSlide();
-      this.slideTo(this.curDot, this.curDot >= (this.len - 1) ? 0 : (this.curDot + 1));
+      this.slideTo(this.curDot, this.curDot >= this.len - 1 ? 0 : this.curDot + 1);
       this.slide();
     },
   },
 };
-
 </script>
 <style lang="less">
 @import '~@/less/common.less';
@@ -100,7 +98,8 @@ export default {
   .slider-container {
     height: 100%;
     &:hover {
-      .prev-page, .next-page{
+      .prev-page,
+      .next-page {
         opacity: 1;
       }
     }
@@ -139,7 +138,7 @@ export default {
       border-radius: 50%;
       background: #ffffff;
       margin: 0 5px;
-      transition-duration: .2s;
+      transition-duration: 0.2s;
       &.on {
         background: @red-color;
       }
@@ -148,9 +147,10 @@ export default {
   .pagination {
     max-width: 1600px;
     z-index: 999;
-    margin:0 auto;
+    margin: 0 auto;
     position: relative;
-    .prev-page, .next-page{
+    .prev-page,
+    .next-page {
       width: 18px;
       height: 40px;
       background: url('/public/img/arrow.png') no-repeat;
@@ -158,7 +158,7 @@ export default {
       position: absolute;
       top: 180px;
       padding: 10px;
-      border: 2px solid rgba(220,220,220,0.6);
+      border: 2px solid rgba(220, 220, 220, 0.6);
       background-position: 10px 10px;
       opacity: 0;
       z-index: 999;
@@ -177,7 +177,8 @@ export default {
   .slider {
     height: 350px;
     .pagination {
-      .prev-page, .next-page {
+      .prev-page,
+      .next-page {
         top: 150px;
       }
     }

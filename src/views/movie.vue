@@ -3,85 +3,75 @@
     <nav>
       <ul>
         <li>
-          <router-link to="/movie/1"
-                       :class="{on: this.curType === 1}">正在热映</router-link>
+          <router-link :class="{ on: showType === 1 }" to="/movie?showType=1">正在热映</router-link>
         </li>
         <li>
-          <router-link to="/movie/2"
-                       :class="{on: this.curType === 2}">即将上映</router-link>
+          <router-link :class="{ on: showType === 2 }" to="/movie?showType=2">即将上映</router-link>
         </li>
         <li>
-          <router-link to="/movie/3"
-                       :class="{on: this.curType === 3}">经典影片</router-link>
+          <router-link :class="{ on: showType === 3 }" to="/movie?showType=3">经典影片</router-link>
         </li>
       </ul>
     </nav>
-    <div class="category"
-         @click="categoryClick">
+    <div class="category">
       <div class="list">
         <span class="name">类型:</span>
         <ul>
-          <li v-for="(item, idx) in catList"
-              :key="idx"
-              :class="{on: idx === dataParams.catIndex}"
-              data-parent="1"
-              :data-child="idx">{{ item.text }}</li>
+          <li
+            v-for="(item, idx) in catList"
+            :key="idx"
+            :class="{ on: item.id === catId }"
+            @click="changeCategory(1, item.id)"
+          >{{ item.text }}</li>
         </ul>
       </div>
       <hr>
       <div class="list">
         <span class="name">区域:</span>
         <ul>
-          <li v-for="(item, idx) in sourceList"
-              :key="idx"
-              :class="{on: idx === dataParams.sourceIndex}"
-              data-parent="2"
-              :data-child="idx">{{ item.text }}</li>
+          <li
+            v-for="(item, idx) in sourceList"
+            :key="idx"
+            :class="{ on: item.id === sourceId }"
+            @click="changeCategory(2, item.id)"
+          >{{ item.text }}</li>
         </ul>
       </div>
       <hr>
       <div class="list">
         <span class="name">年代:</span>
         <ul>
-          <li v-for="(item, idx) in sourceList"
-              :key="idx"
-              :class="{on: idx === dataParams.timeIndex}"
-              data-parent="3"
-              :data-child="idx">{{ item.text }}</li>
+          <li
+            v-for="(item, idx) in timeList"
+            :key="idx"
+            :class="{ on: item.id === timeId }"
+            @click="changeCategory(3, item.id)"
+          >{{ item.text }}</li>
         </ul>
       </div>
     </div>
     <div class="movieList">
       <div class="sortList">
-        <my-radio :myRadioList="myRadioList"
-                  name="type"
-                  @radioType="radioType"
-                  :value="dataParams.radioValue"></my-radio>
+        <my-radio :myRadioList="myRadioList" name="type" @radioChange="radioChange" :value="sortId"></my-radio>
       </div>
-      <div class="filmList"
-           v-if="!isLoading">
-        <div class="item"
-             v-for="(film, idx) in filmsList"
-             :key="idx">
-          <img :src="film.img" />
-          <p>{{film.title}}</p>
+      <div class="filmList" v-if="!isLoading">
+        <div class="item" v-for="(film, idx) in filmsList" :key="idx">
+          <img :src="film.img">
+          <p>{{ film.title }}</p>
           <div v-html="film.grade ? film.grade : 暂无评分"></div>
         </div>
       </div>
     </div>
-    <pagination :count="count"
-                v-if="count > 0"
-                @page="getPage"
-                :page="dataParams.curPage"></pagination>
+    <pagination :count="count" v-if="count > 0" @page="getPage" :page="pageNo" pageSize=30></pagination>
   </div>
 </template>
 
 <script>
+import _ from 'lodash';
 import myRadio from '@/components/myRadio.vue';
 import pagination from '@/components/pagination.vue';
-
-const category = require('@/data/category.json');
-const { queryFilms } = require('@/utils/api_helper');
+import category from '@/data/category.json';
+import { getFilms } from '@/utils/api_helper';
 
 export default {
   data() {
@@ -105,14 +95,6 @@ export default {
       ],
       filmsList: [],
       count: 0,
-      dataListener: [],
-      dataParams: {
-        catIndex: 0,
-        sourceIndex: 0,
-        timeIndex: 0,
-        radioValue: 1,
-        curPage: 1,
-      },
       isLoading: false,
     };
   },
@@ -129,106 +111,87 @@ export default {
     timeList() {
       return category.time;
     },
-    curType() {
-      return parseInt(this.$route.params.type, 10);
+    pageNo() {
+      return this.$route.query.pageNo ? parseInt(this.$route.query.pageNo, 10) : 1;
+    },
+    showType() {
+      return this.$route.query.showType ? parseInt(this.$route.query.showType, 10) : 1;
+    },
+    sortId() {
+      return this.$route.query.sortId ? parseInt(this.$route.query.sortId, 10) : 1;
+    },
+    catId() {
+      return this.$route.query.catId ? parseInt(this.$route.query.catId, 10) : 'all';
+    },
+    sourceId() {
+      return this.$route.query.sourceId ? parseInt(this.$route.query.sourceId, 10) : 'all';
+    },
+    timeId() {
+      return this.$route.query.timeId ? parseInt(this.$route.query.timeId, 10) : 'all';
+    },
+  },
+
+  methods: {
+    queryAppend(obj) {
+      let query = { ...this.$route.query, ...obj };
+      query = _.omitBy(query, (value) => { return value === 'all' })
+      if (!obj.pageNo) {
+        query = _.omit(query, 'pageNo');
+      }
+      this.$router.push({ query });
+    },
+    changeCategory(type, subType) {
+      switch (type) {
+        case 2:
+          this.queryAppend({ sourceId: subType });
+          break;
+        case 3:
+          this.queryAppend({ timeId: subType });
+          break;
+        default:
+          this.queryAppend({ catId: subType });
+      }
+    },
+    getData() {
+      const params = {
+        params: _.omitBy({
+          catId: this.catId,
+          timeId: this.timeId,
+          sourceId: this.sourceId,
+          type: this.showType,
+        }, (value) => { return value === 'all' }),
+        pageNo: this.pageNo,
+        pageSize: 30,
+        sort: this.sortId,
+      }
+      this.isLoading = true;
+      getFilms(params)
+        .then(data => {
+          this.filmsList = data.data;
+          this.count = data.count;
+          this.isLoading = false;
+        })
+        .catch(() => {
+          this.isLoading = false;
+        });
+    },
+    radioChange(value) {
+      this.queryAppend({ sortId: value });
+    },
+    getPage(value) {
+      this.queryAppend({ pageNo: value });
+    },
+  },
+  watch: {
+    $route() {
+      this.getData();
     },
   },
 
   mounted() {
-
-  },
-
-  methods: {
-    categoryClick(e) {
-      switch (parseInt(e.target.dataset.parent, 10)) {
-        case 2:
-          this.$set(this.dataParams, 'sourceIndex', parseInt(e.target.dataset.child, 10));
-          break;
-        case 3:
-          this.$set(this.dataParams, 'timeIndex', parseInt(e.target.dataset.child, 10));
-          break;
-        default:
-          this.$set(this.dataParams, 'catIndex', parseInt(e.target.dataset.child, 10));
-      }
-      this.count = 0;
-      this.$set(this.dataParams, 'radioValue', 1);
-      this.$set(this.dataParams, 'curPage', 1);
-    },
-    getData(params) {
-      this.isLoading = true;
-      queryFilms(params).then((data) => {
-        if (data.count || data.count === 0) {
-          this.filmsList = data.data;
-          this.count = data.count;
-        }
-        this.isLoading = false;
-        this.emitDataListener();
-      }).catch(() => {
-        this.isLoading = false;
-        this.emitDataListener();
-      });
-    },
-    addDataListener() {
-      const params = {
-        type: this.curType,
-      };
-      if (this.dataParams.catIndex !== 0) {
-        params.catId = this.catList[this.dataParams.catIndex].catId;
-      }
-      if (this.dataParams.sourceIndex !== 0) {
-        params.sourceId = this.sourceList[this.dataParams.sourceIndex].sourceId;
-      }
-      if (this.dataParams.timeIndex !== 0) {
-        params.timeId = this.timeList[this.dataParams.timeIndex].timeId;
-      }
-      if (this.dataParams.radioValue === 2) {
-        params.sort = { time: -1 };
-      }
-      if (this.dataParams.radioValue === 3) {
-        params.sort = { grade: -1 };
-      }
-      params.limit = 30;
-      params.skip = (this.dataParams.curPage - 1) * 30;
-      this.dataListener.push(params);
-    },
-    emitDataListener() {
-      if (this.dataListener.length > 0 && this.isLoading === false) {
-        this.getData(this.dataListener.pop());
-        this.dataListener = [];
-      }
-    },
-    radioType(value) {
-      this.$set(this.dataParams, 'radioValue', value);
-      this.count = 0;
-      this.$set(this.dataParams, 'curPage', 1);
-    },
-    getPage(value) {
-      this.$set(this.dataParams, 'curPage', value);
-    },
-  },
-  watch: {
-    dataParams: {
-      deep: true,
-      immediate: true,
-      handler() {
-        this.addDataListener();
-        this.emitDataListener();
-      },
-    },
-    $route() {
-      this.count = 0;
-      this.dataParams = {
-        catIndex: 0,
-        sourceIndex: 0,
-        timeIndex: 0,
-        radioValue: 1,
-        curPage: 1,
-      };
-      this.emitDataListener();
-    },
+    this.getData();
   },
 };
-
 </script>
 <style scoped lang="less">
 @import '~@/less/common.less';
@@ -243,9 +206,10 @@ nav {
   ul {
     max-width: 375px;
     margin: 0 auto;
+    display: flex;
+    flex-direction: row;
   }
   li {
-    display: inline-block;
     width: 33.3%;
     line-height: 60px;
     .on {
@@ -293,8 +257,10 @@ nav {
   .filmList {
     text-align: center;
     margin: 40px 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
     .item {
-      display: inline-block;
       width: 50%;
       overflow: hidden;
       vertical-align: top;
@@ -305,24 +271,24 @@ nav {
         width: 100%;
       }
       p {
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          .fs(16);
-          text-align: center;
-          margin: 5px 0 8px 0;
-        }
-        div {
-          text-align: center;
-          color: @orange-color;
-          font-style: italic;
-          .fs(18);
-          margin-bottom: 15px;
-        }
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        .fs(16);
+        text-align: center;
+        margin: 5px 0 8px 0;
+      }
+      div {
+        text-align: center;
+        color: @orange-color;
+        font-style: italic;
+        .fs(18);
+        margin-bottom: 15px;
+      }
     }
   }
 }
-@media(min-width: @md-min) {
+@media (min-width: @md-min) {
   .movieList {
     .filmList {
       .item {
@@ -332,7 +298,7 @@ nav {
     }
   }
 }
-@media(min-width: @lg-min) {
+@media (min-width: @lg-min) {
   .movieList {
     .filmList {
       .item {

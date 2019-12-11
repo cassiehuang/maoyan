@@ -1,18 +1,16 @@
 import Vue from 'vue';
 import 'babel-polyfill';
 import App from './App.vue';
-import axios from 'axios';
 
 import router from './router/index';
 import store from './store/index';
 import { auth } from '@/utils/api_helper';
 
-axios.defaults.baseURL = 'http://localhost:3333';
 Vue.config.productionTip = false;
 
 router.beforeEach((from, to, next) => {
   if (!store.state.user.isLogin && store.state.user.firstEnter) {
-    auth().then((data) => {
+    auth().then(data => {
       if (data.username) {
         store.commit('CHANGE_LOADING', data);
       } else {

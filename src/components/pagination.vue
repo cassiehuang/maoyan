@@ -1,80 +1,71 @@
 <template>
   <div>
     <ul @click="pageClick">
-      <li v-if="curPage > 1">上一页</li>
-      <li v-for="(item, idx) in showPageList"
-          :key="idx"
-          :class="{on: curIndex === idx}">{{item}}</li>
-      <li v-if="curPage < totalPage">下一页</li>
+      <li :class="{disabled: prevDisabled}">上一页</li>
+      <li v-for="item in showPageList" :key="item" :class="{on: page === item}">{{item}}</li>
+      <li :class="{disabled: nextDisabled}">下一页</li>
     </ul>
   </div>
 </template>
 
 <script>
 export default {
-  data() {
-    return {
-      showPageList: [],
-      curIndex: 0,
-    };
-  },
-  props: ['count', 'page'],
-  components: {},
+  props: ['count', 'page', 'pageSize'],
 
   computed: {
     totalPage() {
-      return Math.ceil(this.count / 30);
+      return Math.ceil(this.count / this.pageSize);
     },
-    curPage() {
-      return this.showPageList[this.curIndex];
+    showPageList() {
+      if (this.totalPage === 0) {
+        return [];
+      }
+      if (this.totalPage <= 7) {
+        const array = []
+        for (let i = 1; i <= this.totalPage; i += 1) {
+          array.push(i);
+        }
+        return array;
+      }
+      if (this.page <= 3) {
+        return [1, 2, 3, 4, 5, '>', this.totalPage];
+      }
+      if (this.page >= this.totalPage - 1) {
+        return [
+          '<',
+          this.totalPage - 5,
+          this.totalPage - 4,
+          this.totalPage - 3,
+          this.totalPage - 2,
+          this.totalPage - 1,
+          this.totalPage,
+        ];
+      }
+      return ['<', this.page - 2, this.page - 1, this.page, this.page + 1, this.page + 2, '>'];
     },
-  },
-
-  mounted() {
-    this.init();
+    prevDisabled() {
+      return this.page <= 1;
+    },
+    nextDisabled() {
+      return this.page >= this.totalPage
+    }
   },
 
   methods: {
-    init() {
-      if (this.count === 0) {
-        this.$el.innerHTML = '';
-        return;
-      }
-      if (this.totalPage <= 7) {
-        for (let i = 1; i <= this.totalPage; i += 1) {
-          this.showPageList.push(i);
-        }
-        return;
-      }
-      this.showPageList = [1, 2, 3, 4, 5, '...', this.totalPage];
-    },
     changePage(page) {
       this.$emit('page', page);
-      if (this.totalPage <= 7) {
-        this.curIndex = page - 1;
-      } else if (page <= 3) {
-        this.showPageList = [1, 2, 3, 4, 5, '...', this.totalPage];
-        this.curIndex = page - 1;
-      } else if (page >= this.totalPage - 1) {
-        this.showPageList = ['...', this.totalPage - 5, this.totalPage - 4, this.totalPage - 3, this.totalPage - 2, this.totalPage - 1, this.totalPage];
-        this.curIndex = page + 6 - this.totalPage;
-      } else {
-        this.showPageList = ['...', page - 2, page - 1, page, page + 1, page + 2, '...'];
-        this.curIndex = 3;
-      }
     },
     pageClick(e) {
-      if (e.target.innerHTML === '上一页') {
-        this.changePage(this.curPage - 1);
-      } else if (e.target.innerHTML === '下一页') {
-        this.changePage(this.curPage + 1);
+      if (e.target.innerHTML === '上一页' && !this.prevDisabled) {
+        this.changePage(this.page - 1);
+      } else if (e.target.innerHTML === '下一页' && !this.nextDisabled) {
+        this.changePage(this.page + 1);
       } else if (parseInt(e.target.innerHTML, 10) > 0) {
         this.changePage(parseInt(e.target.innerHTML, 10));
       }
     },
   },
 };
-
 </script>
 <style scoped lang="less">
 @import '~@/less/common.less';
@@ -92,6 +83,11 @@ ul {
       background: @red-color;
       color: #fff;
       border: 1px solid @red-color;
+    }
+    &.disabled {
+      background: #dadada;
+      border: #dadada;
+      color: #999999;
     }
   }
 }

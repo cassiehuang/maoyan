@@ -1,29 +1,28 @@
 <template>
   <div v-if="recommandList.length > 0">
     <slider>
-      <li v-for="(item, idx) in recommandList"
-          :key="idx">
+      <li v-for="(item, idx) in recommandList" :key="idx">
         <router-link :to="`/article/${item.id}`">
-          <img :src="item.recommand_img" />
+          <img :src="item.recommand_img">
         </router-link>
       </li>
     </slider>
     <div class="main">
       <div class="left-section">
         <section class="online-films">
-          <h3>正在热映（{{onlineFilmsLen}}）
-            <router-link class="more"
-                         to="/movie/1">全部 ></router-link>
+          <h3>
+            正在热映（{{onlineFilmsLen}}）
+            <router-link class="more" to="/movie/1">全部 ></router-link>
           </h3>
           <div class="list">
-            <div class="item"
-                 v-for="(item, idx) in onlineFilms"
-                 :key="idx">
-              <img :src="item.img" />
+            <div class="item" v-for="(item, idx) in onlineFilms" :key="idx">
+              <img :src="item.img">
               <p class="film-info">
-                <span class="grade"
-                      v-html="item.grade"
-                      v-if="item.grade!=='&#x6682;&#x65E0;&#x8BC4;&#x5206;'"></span>
+                <span
+                  class="grade"
+                  v-html="item.grade"
+                  v-if="item.grade!=='&#x6682;&#x65E0;&#x8BC4;&#x5206;'"
+                ></span>
                 <span class="film-title">{{ item.title }}</span>
               </p>
               <span class="buy">购票</span>
@@ -31,15 +30,13 @@
           </div>
         </section>
         <section class="pre-films">
-          <h3>即将上映（{{preFilmsLen}}）
-            <router-link class="more"
-                         to="/movie/2">全部 ></router-link>
+          <h3>
+            即将上映（{{preFilmsLen}}）
+            <router-link class="more" to="/movie/2">全部 ></router-link>
           </h3>
           <div class="list">
-            <div class="item"
-                 v-for="(item, idx) in preFilms"
-                 :key="idx">
-              <img :src="item.img" />
+            <div class="item" v-for="(item, idx) in preFilms" :key="idx">
+              <img :src="item.img">
               <p class="film-info">
                 <span class="film-title">{{ item.title }}</span>
               </p>
@@ -57,13 +54,11 @@
         <aside class="aside-1 hidden-lg-down">
           <h3>今日票房</h3>
           <div class="list">
-            <div class="item"
-                 v-for="(item, idx) in goodFilms"
-                 :key="idx">
-              <div class="first"
-                   v-if="idx === 0">
-                <img :src="item.img" />
-                <span>{{item.title}}</span><br>
+            <div class="item" v-for="(item, idx) in goodFilms" :key="idx">
+              <div class="first" v-if="idx === 0">
+                <img :src="item.img">
+                <span>{{item.title}}</span>
+                <br>
                 <span>{{item.grade}}</span>
               </div>
               <p v-if="idx !== 0">
@@ -77,12 +72,9 @@
         <aside class="aside-2">
           <h3>最受期待</h3>
           <div class="list">
-            <div class="item"
-                 v-for="(item, idx) in hotFilms"
-                 :key="idx">
-              <div class="first"
-                   v-if="idx === 0">
-                <img :src="item.img" />
+            <div class="item" v-for="(item, idx) in hotFilms" :key="idx">
+              <div class="first" v-if="idx === 0">
+                <img :src="item.img">
                 <span>{{item.title}}</span>
                 <span>{{item.peopleNum}}人想看</span>
               </div>
@@ -95,16 +87,14 @@
           </div>
         </aside>
         <aside class="aside-3">
-          <h3>top100
+          <h3>
+            top100
             <span>查看更多</span>
           </h3>
           <div class="list">
-            <div class="item"
-                 v-for="(item, idx) in goodFilms"
-                 :key="idx">
-              <div class="first"
-                   v-if="idx === 0">
-                <img :src="item.img" />
+            <div class="item" v-for="(item, idx) in goodFilms" :key="idx">
+              <div class="first" v-if="idx === 0">
+                <img :src="item.img">
                 <span>{{item.title}}</span>
                 <span>{{item.grade}}</span>
               </div>
@@ -123,10 +113,7 @@
 
 <script>
 import Slider from '../components/slider.vue';
-// const opt = require('@/utils/api_helper.js');
-// const queryRecommand = opt.queryRecommand;
-// const queryFilms = opt.queryFilms;
-import { queryRecommand, queryFilms } from '@/utils/api_helper';
+import { getRecommand, getOnlineFilms, getPreFilms, getGoodFilms, getHotFilms } from '@/utils/api_helper';
 
 export default {
   data() {
@@ -155,35 +142,34 @@ export default {
 
   methods: {
     getRecommand() {
-      queryRecommand({ isShow: true }).then((data) => {
-        this.recommandList = data.data;
+      getRecommand().then(data => {
+        this.recommandList = data;
       });
     },
     getOnlineFilms() {
-      queryFilms({ type: 1, limit: 12 }).then((data) => {
+      getOnlineFilms().then(data => {
         this.onlineFilms = data.data;
         this.onlineFilmsLen = data.count;
       });
     },
     getPreFilms() {
-      queryFilms({ type: 2, limit: 12 }).then((data) => {
+      getPreFilms().then(data => {
         this.preFilms = data.data;
         this.preFilmsLen = data.count;
       });
     },
     getGoodFilms() {
-      queryFilms({ type: 1, limit: 10, sort: { grade: -1 } }).then((data) => {
-        this.goodFilms = data.data;
+      getGoodFilms().then(data => {
+        this.goodFilms = data;
       });
     },
     getHotFilms() {
-      queryFilms({ type: 2, limit: 10, sort: { peopleNum: -1 } }).then((data) => {
-        this.hotFilms = data.data;
+      getHotFilms().then(data => {
+        this.hotFilms = data;
       });
     },
   },
 };
-
 </script>
 <style scoped lang="less">
 @import '~@/less/common.less';
@@ -263,15 +249,18 @@ export default {
       }
       .person-num {
         line-height: 30px;
+        color: @orange-color;
       }
       .pre-block {
+        display: flex;
+        flex-direction: row;
         span {
-          display: inline-block;
           box-sizing: border-box;
           width: 50%;
           border: 1px solid #f1f1f1;
           line-height: 40px;
           &:last-of-type {
+            cursor: pointer;
             color: @blue-color;
             &:hover {
               background: @blue-color;
@@ -282,7 +271,6 @@ export default {
       }
       .sale-time {
         line-height: 30px;
-        border: 1px solid #f1f1f1;
       }
     }
   }

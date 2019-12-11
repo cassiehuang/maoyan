@@ -10,7 +10,7 @@ export default new Vuex.Store({
       username: null,
       firstEnter: true,
     },
-    city: '成都',
+    city: '北京',
     screen: {
       size: 'xl',
     },
@@ -31,7 +31,7 @@ export default new Vuex.Store({
     CHANGE_ENTER(state) {
       state.user = {
         firstEnter: false,
-        isLogin: true,
+        isLogin: false,
       };
     },
     CHANGE_CITY(state, city) {

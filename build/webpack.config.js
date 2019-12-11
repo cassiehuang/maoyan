@@ -33,6 +33,7 @@ module.exports = {
 
   externals: {
     jquery: 'jQuery',  // 防止将import的包导到bundle，而是在运行时再从外部取获取这些依赖
+    BMap: "BMap",
   },
   stats: { children: false },
   module: {

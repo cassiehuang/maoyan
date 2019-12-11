@@ -1,5 +1,5 @@
 <template>
-  <div select-container :id="type" >
+  <div select-container :id="type">
     <slot name="label"></slot>
     <slot name="list"></slot>
   </div>
@@ -8,21 +8,17 @@
 <script>
 export default {
   data() {
-    return {
-    };
+    return {};
   },
   props: ['type'],
   components: {},
 
   computed: {},
 
-  mounted() {
-  },
+  mounted() {},
 
-  methods: {
-  },
+  methods: {},
 };
-
 </script>
 <style lang="less">
 @import '~@/less/common.less';

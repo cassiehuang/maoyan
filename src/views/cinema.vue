@@ -1,80 +1,70 @@
 <template>
   <div cinemas>
-    <div class="category"
-         @click="categoryClick">
+    <div class="category">
       <div class="list">
         <span class="name">品牌:</span>
         <ul>
-          <li v-for="(item, idx) in brandList"
-              :key="idx"
-              :class="{on: idx === dataParams.brandIndex}"
-              data-parent="1"
-              :data-child="idx"
-              v-html="item.text"></li>
+          <li
+            v-for="item in brandList"
+            :key="item.id"
+            :class="{ on: item.id === brandId }"
+            v-html="item.text"
+            @click="changeCategory(1, item.id)"
+          ></li>
         </ul>
       </div>
       <hr>
       <div class="list">
         <span class="name">行政区:</span>
         <ul>
-          <li v-for="(item, idx) in areaList"
-              :key="idx"
-              :class="{on: idx === dataParams.areaIndex}"
-              data-parent="2"
-              :data-child="idx">{{ item.text }}</li>
+          <li
+            v-for="item in areaList"
+            :key="item.id"
+            :class="{on: item.id === areaId}"
+            @click="changeCategory(2, item.id)"
+          >{{ item.text }}</li>
         </ul>
       </div>
       <hr>
       <div class="list">
         <span class="name">特殊厅:</span>
         <ul>
-          <li v-for="(item, idx) in hallList"
-              :key="idx"
-              :class="{on: idx === dataParams.hallIndex}"
-              data-parent="3"
-              :data-child="idx">{{ item.text }}</li>
+          <li
+            v-for="item in hallList"
+            :key="item.id"
+            :class="{on: item.id === hallId}"
+            @click="changeCategory(3, item.id)">
+            {{ item.text }}
+          </li>
         </ul>
       </div>
     </div>
     <h2>影院列表</h2>
-    <div class="cinema_list"
-         v-show="!isLoading">
-      <div class="item"
-           v-for="(item, idx) in cinemasList"
-           :key="idx">
-        <h4>{{item.name}}</h4>
-        <p>{{item.address}}</p>
+    <div class="cinema_list" v-show="!isLoading">
+      <div class="item" v-for="(item, idx) in cinemasList" :key="idx">
+        <h4>{{ item.name }}</h4>
+        <p>{{ item.address }}</p>
         <div class="buy">
-          <input type="button"
-                 value="选座购票" />
+          <input type="button" value="选座购票">
         </div>
       </div>
     </div>
-    <pagination :count="count"
-                :page="dataParams.curPage"
-                @page="getPage"
-                v-if="count > 0"></pagination>
+    <pagination :count="count" :page="pageNo" pageSize=30 @page="getPage" v-if="count > 0"></pagination>
   </div>
 </template>
 
 <script>
+import _ from 'lodash';
 import pagination from '@/components/pagination.vue';
 
 const cinemas = require('@/data/cinemas.json');
-const { queryCinemas } = require('@/utils/api_helper.js');
+const { getCinemas } = require('@/utils/api_helper.js');
 
 export default {
   data() {
     return {
-      dataParams: {
-        curPage: 1,
-        brandIndex: 0,
-        areaIndex: 0,
-        hallIndex: 0,
-      },
       cinemasList: [],
       count: 0,
-      listeners: [],
       isLoading: false,
     };
   },
@@ -91,77 +81,78 @@ export default {
     hallList() {
       return cinemas.hall;
     },
+    brandId() {
+      return this.$route.query.brandId ? parseInt(this.$route.query.brandId, 10) : 'all';
+    },
+    areaId() {
+      return this.$route.query.areaId ? parseInt(this.$route.query.areaId, 10) : 'all';
+    },
+    hallId() {
+      return this.$route.query.hallId ? parseInt(this.$route.query.hallId, 10) : 'all';
+    },
+    pageNo() {
+      return this.$route.query.pageNo ? parseInt(this.$route.query.pageNo, 10) : 1;
+    }
   },
 
-  mounted() { },
-
   methods: {
-    getData(params) {
-      this.isLoading = true;
-      queryCinemas(params).then((data) => {
-        if (data.count || data.count === 0) {
-          this.cinemasList = data.data;
-          this.count = data.count;
-        }
-        this.isLoading = false;
-        this.emitListener();
-      }).catch(() => {
-        this.isLoading = false;
-        this.emitListener();
-      });
+    queryAppend(obj) {
+      let query = { ...this.$route.query, ...obj };
+      query = _.omitBy(query, (value) => { return value === 'all' })
+      if (!obj.pageNo) {
+        query = _.omit(query, 'pageNo');
+      }
+      this.$router.push({ query });
     },
-    addListener() {
+    getData() {
       const params = {
-        skip: (this.dataParams.curPage - 1) * 12,
-        limit: 12,
-      };
-      if (this.dataParams.brandIndex !== 0) {
-        params.brandId = cinemas.brand[this.dataParams.brandIndex].id;
+        params: _.omitBy({
+          brandId: this.brandId,
+          areaId: this.areaId,
+          hallId: this.hallId,
+        }, (value) => { return value === 'all' }),
+        pageNo: this.pageNo,
+        pageSize: 30,
       }
-      if (this.dataParams.areaIndex !== 0) {
-        params.areaId = cinemas.area[this.dataParams.areaIndex].id;
-      }
-      if (this.dataParams.hallIndex !== 0) {
-        params.hallId = cinemas.hall[this.dataParams.hallIndex].id;
-      }
-      this.listeners.push(params);
+      this.isLoading = true;
+      getCinemas(params)
+        .then(data => {
+          if (data.count || data.count === 0) {
+            this.cinemasList = data.data;
+            this.count = data.count;
+          }
+          this.isLoading = false;
+        })
+        .catch(() => {
+          this.isLoading = false;
+        });
     },
-    emitListener() {
-      if (this.isLoading === false && this.listeners.length > 0) {
-        this.getData(this.listeners.pop());
-        this.listeners = [];
-      }
-    },
-    categoryClick(e) {
-      switch (parseInt(e.target.dataset.parent, 10)) {
+    changeCategory(type, subType) {
+      switch (type) {
         case 2:
-          this.$set(this.dataParams, 'areaIndex', parseInt(e.target.dataset.child, 10));
+          this.queryAppend({ areaId: subType });
           break;
         case 3:
-          this.$set(this.dataParams, 'hallIndex', parseInt(e.target.dataset.child, 10));
+          this.queryAppend({ hallId: subType });
           break;
         default:
-          this.$set(this.dataParams, 'brandIndex', parseInt(e.target.dataset.child, 10));
+          this.queryAppend({ brandId: subType });
       }
-      this.count = 0;
-      this.$set(this.dataParams, 'curPage', 1);
     },
     getPage(value) {
-      this.$set(this.dataParams, 'curPage', value);
+      this.queryAppend({ pageNo: value });
     },
   },
   watch: {
-    dataParams: {
-      deep: true,
-      immediate: true,
-      handler() {
-        this.addListener();
-        this.emitListener();
-      },
+    $route() {
+      this.getData();
     },
   },
-};
 
+  mounted() {
+    this.getData();
+  },
+};
 </script>
 <style scoped lang="less">
 @import '~@/less/common.less';
@@ -231,7 +222,7 @@ h2 {
       position: absolute;
       right: 0;
       top: 20px;
-      input[type="button"] {
+      input[type='button'] {
         border-radius: 15px;
         color: #fff;
         width: 80px;

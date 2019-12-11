@@ -1,12 +1,12 @@
 <template>
   <div login>
     <div class="container">
-      <img class="logo" src="/public/img/logo.png" />
-      <img class="pic" src="/public/img/image1.png" />
+      <img class="logo" src="/public/img/logo.png">
+      <img class="pic" src="/public/img/image1.png">
       <div class="input-banner" :class="{error: errorHint}">
-        <input type="text" v-model="username" placeholder="输入用户名" />
-        <input type="password" v-model="password" placeholder="输入密码" />
-        <input type="button" value="登录" @click="submit"/>
+        <input type="text" v-model="username" placeholder="输入用户名">
+        <input type="password" v-model="password" placeholder="输入密码">
+        <input type="button" value="登录" @click="submit">
       </div>
     </div>
   </div>
@@ -24,12 +24,6 @@ export default {
     };
   },
 
-  components: {},
-
-  computed: {},
-
-  mounted() { },
-
   methods: {
     submit() {
       if (this.username === '') {
@@ -40,7 +34,7 @@ export default {
         this.errorHint = true;
         return;
       }
-      login({ username: this.username, password: this.password }).then((data) => {
+      login({ username: this.username, password: this.password }).then(data => {
         if (!data.username) {
           this.errorHint = true;
         } else {
@@ -59,23 +53,25 @@ export default {
     },
   },
 };
-
 </script>
 <style scoped lang="less">
 @import '~@/less/common.less';
 [login] {
-  position: absolute;
-  top: 0;
-  bottom: 100px;
-  width: 100%;
+  // position: absolute;
+  // top: 0;
+  // bottom: 100px;
+  // width: 100%;
+  height: 100%;
   text-align: center;
   display: flex;
+  box-sizing: border-box;
+  padding-top: 100px;
   //align-items: center;
   .logo {
-   display: block;
-   margin: 30px auto;
-   width: 150px;
-   padding-right: 400px;
+    display: block;
+    margin: 30px auto;
+    width: 150px;
+    padding-right: 400px;
   }
   .input-banner {
     width: 400px;
@@ -85,7 +81,7 @@ export default {
     padding-top: 100px;
     &.error {
       input {
-        border:1px solid @red-color;
+        border: 1px solid @red-color;
       }
     }
     input {
@@ -94,7 +90,7 @@ export default {
       .fs(13);
       width: 270px;
       box-sizing: border-box;
-      &[type="button"] {
+      &[type='button'] {
         background: @red-color;
         color: #fff;
         border: none;

@@ -17,7 +17,7 @@ export default {
 
   computed: {},
 
-  mounted() { },
+  mounted() {},
 
   methods: {
     toggleBanner() {
@@ -25,7 +25,6 @@ export default {
     },
   },
 };
-
 </script>
 <style lang="less">
 @import '~@/less/common.less';
@@ -56,18 +55,18 @@ nav.topNav {
     }
   }
   .navbar-brand {
-      line-height: 80px;
-      img{
-        vertical-align: middle;
-      }
-      img:before{
-        content:'';
-        width: 1px;
-        height: 100%;
-        vertical-align: middle;
-        display: inline-block;
-      }
+    line-height: 80px;
+    img {
+      vertical-align: middle;
     }
+    img:before {
+      content: '';
+      width: 1px;
+      height: 100%;
+      vertical-align: middle;
+      display: inline-block;
+    }
+  }
   .navbar-collapse {
     .navbar-nav {
       display: flex;
@@ -85,7 +84,7 @@ nav.topNav {
     .navbar-collapse {
       display: none;
       position: absolute;
-      top:80px;
+      top: 80px;
       left: 0px;
       width: 100%;
       background: #fff;

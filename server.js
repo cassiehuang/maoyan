@@ -27,7 +27,7 @@ const registerApiRoute = () => {
   app.use(
     '/api/*',
     proxy({
-      target: 'https://cassiehuang.online:8001',
+      target: 'http://cassiehuang.online:8001',
       changeOrigin: true,
     }),
   );

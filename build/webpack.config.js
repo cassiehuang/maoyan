@@ -25,7 +25,7 @@ module.exports = {
 
   resolve: {
     //扩展名，当引入文件没写扩展名时
-    extensions: ['.json', '.js', '.vue'],
+    extensions: ['.js', '.json', '.vue'],
     alias: {
       '@': path.resolve(__dirname, '../src')
     }

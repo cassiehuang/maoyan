@@ -55,7 +55,7 @@
 
 <script>
 import _ from 'lodash';
-import pagination from '@/components/pagination.vue';
+import pagination from '@/components/pagination';
 
 const cinemas = require('@/data/cinemas.json');
 const { getCinemas } = require('@/utils/api_helper.js');

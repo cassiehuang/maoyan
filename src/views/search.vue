@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { search } from '@/utils/api_helper';
+import { search } from '@/utils/api_helper.js';
 
 export default {
   data () {

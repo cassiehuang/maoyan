@@ -29,3 +29,4 @@ yarn run lint
 ![Image text](https://github.com/cassiehuang/maoyan/blob/master/img-floder/movie.png)
 ![Image text](https://github.com/cassiehuang/maoyan/blob/master/img-floder/cinemas.png)
 ![Image text](https://github.com/cassiehuang/maoyan/blob/master/img-floder/board.png)
+

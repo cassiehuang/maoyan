@@ -22,7 +22,6 @@ const serve = (urlPath, cache) => {
     maxAge: cache && isProd ? 60 * 60 * 24 * 30 : 0,
   });
 };
-
 const registerApiRoute = () => {
   app.use(
     '/api/*',

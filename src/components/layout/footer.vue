@@ -3,7 +3,7 @@
     <p>友情链接：<a href="https://github.com/cassiehuang/maoyan-api">后端接口</a> | <a href="https://github.com/cassiehuang/maoyan-admin">管理工具</a></p>
     <p>github: https://github.com/cassiehuang</p>
     <p>联系邮箱：2694915367@qq.com</p>
-    <p>蜀ICP备19037583号-1</p>
+    <p><a href="http://www.beian.miit.gov.cn">蜀ICP备19037583号-1</a></p>
   </section>
 </template>
 
